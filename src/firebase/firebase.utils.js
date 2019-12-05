@@ -10,7 +10,7 @@ const config = {
     storageBucket: "",
     messagingSenderId: "676001565370",
     appId: "1:676001565370:web:ced56c5e37c63067399083"
-};    
+};
 
 export const createUserProfileDocument = async (userAuth, additionalData) => {
     if (!userAuth) return;
@@ -38,6 +38,16 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
 }
 
 firebase.initializeApp(config);
+
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+    const collectionRef = firestore.collection(collectionKey);
+    const batch = firestore.batch();
+    objectsToAdd.forEach(object => {
+        const newDocRef = collectionRef.doc();
+        batch.set(newDocRef, object);
+    });
+    return await batch.commit();
+}
 
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
